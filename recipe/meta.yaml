@@ -1,5 +1,5 @@
 {% set name = "fast-dds" %}
-{% set version = "2.1.0" %}
+{% set version = "2.2.0" %}
 {% set major_minor_version = version.split('.')[0] + '.' + version.split('.')[1] %}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://github.com/eProsima/Fast-DDS/archive/v{{ version }}.tar.gz
-    sha256: 6653772d5cbb0b188bb585d50e557ce5e587faaad4b607120694212bc726bb26
+    sha256: 70123b84f0bbed28b2fac20cbb138f7a4880216d431cbe7b4a8aa0ae5b18575c
 
 build:
   number: 0
