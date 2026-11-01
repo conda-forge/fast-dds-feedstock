@@ -34,6 +34,7 @@ requirements:
     - openssl
     - foonathan-memory
   run:
+    - python
     - fast-cdr >=1.0.24,<2
     - asio >=1.10.8,<1.31
     - tinyxml2
@@ -46,6 +47,14 @@ requirements:
 
 tests:
   - script:
+      - fast-discovery-server --help
+      - if: win
+        then:
+          - call fastdds --help
+          - call ros-discovery --help
+        else:
+          - fastdds --help
+          - ros-discovery --help
       - if: win
         then: if not exist %LIBRARY_PREFIX%\\bin\\fastrtps-${{ major_minor_version }}.dll exit 1
       - if: unix
