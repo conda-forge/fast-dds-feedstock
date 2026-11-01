@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: fast-dds
-  version: "2.4.0"
+  version: "2.6.12"
   major_minor_version: ${{ (version | split('.'))[:2] | join('.') }}
 
 package:
@@ -11,26 +11,27 @@ package:
 
 source:
   - url: https://github.com/eProsima/Fast-DDS/archive/v${{ version }}.tar.gz
-    sha256: 77270b5ab8ccc3143acc88dccd3bf9c30f316a4712a420cdfad8ead18207caaf
+    sha256: 53476bcee331f28fe83e8387122fb7f84ab39209c459bd2cc227c71e4bd21c9b
 
 build:
-  number: 2
+  number: 0
 
 requirements:
   build:
     - ${{ compiler('cxx') }}
     - ${{ compiler('c') }}
-    - cmake
+    - ${{ stdlib('c') }}
+    - cmake <4
     - ninja
     - pkg-config
   host:
-    - fast-cdr
+    - fast-cdr >=1.0.24,<2
     - asio
     - tinyxml2
     - openssl
     - foonathan-memory
   run:
-    - fast-cdr
+    - fast-cdr >=1.0.24,<2
     - asio
     - tinyxml2
     - openssl
@@ -52,6 +53,21 @@ tests:
         then: test -f $PREFIX/include/fastdds/rtps/Endpoint.h
       - if: unix
         then: test -f $PREFIX/include/fastrtps/transport/UDPTransportDescriptor.h
+
+  - requirements:
+      run:
+        - ${{ compiler('cxx') }}
+        - cmake <4
+        - ninja
+    files:
+      recipe:
+        - cmake_test/
+    script:
+      - if: unix
+        then: cmake -S cmake_test -B consumer -G Ninja $CMAKE_ARGS
+        else: cmake -S cmake_test -B consumer -G Ninja %CMAKE_ARGS%
+      - cmake --build consumer
+      - ctest --test-dir consumer --output-on-failure
 
 about:
   license: Apache-2.0

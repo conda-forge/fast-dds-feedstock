@@ -1,7 +1,10 @@
+#!/bin/bash
+set -euxo pipefail
+
 mkdir build
 cd build
 
-cmake \
+cmake ${CMAKE_ARGS} \
     -G "Ninja" \
     -DCMAKE_INSTALL_PREFIX=$PREFIX \
     -DCMAKE_BUILD_TYPE=Release \
