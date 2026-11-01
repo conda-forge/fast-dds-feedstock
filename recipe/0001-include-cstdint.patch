@@ -1,0 +1,20 @@
+--- a/src/cpp/fastdds/topic/DDSSQLFilter/DDSFilterCompoundCondition.hpp
++++ b/src/cpp/fastdds/topic/DDSSQLFilter/DDSFilterCompoundCondition.hpp
+@@ -19,6 +19,7 @@
+ #ifndef _FASTDDS_TOPIC_DDSSQLFILTER_DDSFILTERCOMPOUNDCONDITION_HPP_
+ #define _FASTDDS_TOPIC_DDSSQLFILTER_DDSFILTERCOMPOUNDCONDITION_HPP_
+ 
++#include <cstdint>
+ #include <memory>
+ 
+ #include "DDSFilterCondition.hpp"
+--- a/src/cpp/fastdds/topic/DDSSQLFilter/DDSFilterValue.hpp
++++ b/src/cpp/fastdds/topic/DDSSQLFilter/DDSFilterValue.hpp
+@@ -19,6 +19,7 @@
+ #ifndef _FASTDDS_TOPIC_DDSSQLFILTER_DDSFILTERVALUE_HPP_
+ #define _FASTDDS_TOPIC_DDSSQLFILTER_DDSFILTERVALUE_HPP_
+ 
++#include <cstdint>
+ #include <memory>
+ #include <regex>
+ 

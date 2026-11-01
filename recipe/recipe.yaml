@@ -12,6 +12,8 @@ package:
 source:
   - url: https://github.com/eProsima/Fast-DDS/archive/v${{ version }}.tar.gz
     sha256: 53476bcee331f28fe83e8387122fb7f84ab39209c459bd2cc227c71e4bd21c9b
+    patches:
+      - 0001-include-cstdint.patch
 
 build:
   number: 0
