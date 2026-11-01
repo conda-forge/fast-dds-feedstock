@@ -1,0 +1,69 @@
+schema_version: 1
+
+context:
+  name: fast-dds
+  version: "2.4.0"
+  major_minor_version: ${{ (version | split('.'))[:2] | join('.') }}
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/eProsima/Fast-DDS/archive/v${{ version }}.tar.gz
+    sha256: 77270b5ab8ccc3143acc88dccd3bf9c30f316a4712a420cdfad8ead18207caaf
+
+build:
+  number: 2
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('c') }}
+    - cmake
+    - ninja
+    - pkg-config
+  host:
+    - fast-cdr
+    - asio
+    - tinyxml2
+    - openssl
+    - foonathan-memory
+  run:
+    - fast-cdr
+    - asio
+    - tinyxml2
+    - openssl
+    - foonathan-memory
+  run_exports:
+    - ${{ pin_subpackage(name, upper_bound='x.x') }}
+  run_constraints:
+    - fast-rtps ==99999999 fast_rtps_collides_with_fast_dds
+
+tests:
+  - script:
+      - if: win
+        then: if not exist %LIBRARY_PREFIX%\\bin\\fastrtps-${{ major_minor_version }}.dll exit 1
+      - if: unix
+        then: test -f $PREFIX/lib/libfastrtps${SHLIB_EXT}
+      - if: unix
+        then: test -f $PREFIX/include/fastdds/dds/domain/DomainParticipantFactory.hpp
+      - if: unix
+        then: test -f $PREFIX/include/fastdds/rtps/Endpoint.h
+      - if: unix
+        then: test -f $PREFIX/include/fastrtps/transport/UDPTransportDescriptor.h
+
+about:
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: |
+    eProsima Fast DDS (formerly Fast-RTPS)
+
+
+  homepage: https://github.com/eProsima/Fast-RTPS
+
+extra:
+  recipe-maintainers:
+    - wolfv
+    - MiguelCompany
+    - EduPonz
