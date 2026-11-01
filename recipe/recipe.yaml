@@ -28,13 +28,14 @@ requirements:
     - pkg-config
   host:
     - fast-cdr >=1.0.24,<2
-    - asio
+    # The 2.6 branch still uses Asio's deprecated io_service API.
+    - asio >=1.10.8,<1.31
     - tinyxml2
     - openssl
     - foonathan-memory
   run:
     - fast-cdr >=1.0.24,<2
-    - asio
+    - asio >=1.10.8,<1.31
     - tinyxml2
     - openssl
     - foonathan-memory
