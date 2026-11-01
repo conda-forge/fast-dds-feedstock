@@ -35,6 +35,8 @@ requirements:
     - foonathan-memory
   run:
     - python
+    - if: win
+      then: pywin32
     - fast-cdr >=1.0.24,<2
     - asio >=1.10.8,<1.31
     - tinyxml2
