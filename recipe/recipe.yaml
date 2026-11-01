@@ -43,6 +43,7 @@ requirements:
   run_exports:
     - ${{ pin_subpackage(name, upper_bound='x.x') }}
   run_constraints:
+    - python >=3.6
     - fast-rtps ==99999999 fast_rtps_collides_with_fast_dds
 
 tests:
