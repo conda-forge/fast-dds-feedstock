@@ -6,7 +6,7 @@ context:
   major_minor_version: ${{ (version | split('.'))[:2] | join('.') }}
 
 package:
-  name: ${{ name }}
+  name: fast-dds
   version: ${{ version }}
 
 source:
