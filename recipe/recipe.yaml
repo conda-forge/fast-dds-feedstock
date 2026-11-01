@@ -49,6 +49,16 @@ requirements:
     - fast-rtps ==99999999 fast_rtps_collides_with_fast_dds
 
 tests:
+  - package_contents:
+      lib:
+        - if: win
+          then: fastrtps-${{ major_minor_version }}
+          else: fastrtps
+      include:
+        - fastdds/dds/domain/DomainParticipantFactory.hpp
+        - fastdds/rtps/Endpoint.h
+        - fastrtps/transport/UDPTransportDescriptor.h
+
   - script:
       - fast-discovery-server --help
       - if: win
@@ -58,16 +68,6 @@ tests:
         else:
           - fastdds --help
           - ros-discovery --help
-      - if: win
-        then: if not exist %LIBRARY_PREFIX%\\bin\\fastrtps-${{ major_minor_version }}.dll exit 1
-      - if: unix
-        then: test -f $PREFIX/lib/libfastrtps${SHLIB_EXT}
-      - if: unix
-        then: test -f $PREFIX/include/fastdds/dds/domain/DomainParticipantFactory.hpp
-      - if: unix
-        then: test -f $PREFIX/include/fastdds/rtps/Endpoint.h
-      - if: unix
-        then: test -f $PREFIX/include/fastrtps/transport/UDPTransportDescriptor.h
 
   - requirements:
       run:
