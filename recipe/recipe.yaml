@@ -1,0 +1,100 @@
+schema_version: 1
+
+context:
+  name: fast-dds
+  version: "2.6.12"
+  major_minor_version: ${{ (version | split('.'))[:2] | join('.') }}
+
+package:
+  name: fast-dds
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/eProsima/Fast-DDS/archive/v${{ version }}.tar.gz
+    sha256: 53476bcee331f28fe83e8387122fb7f84ab39209c459bd2cc227c71e4bd21c9b
+    patches:
+      - 0001-include-cstdint.patch
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - cmake <4
+    - ninja
+    - pkg-config
+  host:
+    - fast-cdr >=1.0.24,<2
+    # The 2.6 branch still uses Asio's deprecated io_service API.
+    - asio >=1.10.8,<1.31
+    - tinyxml2
+    - openssl
+    - foonathan-memory
+  run:
+    - python
+    - if: win
+      then: pywin32
+    - fast-cdr >=1.0.24,<2
+    - asio >=1.10.8,<1.31
+    - tinyxml2
+    - openssl
+    - foonathan-memory
+  run_exports:
+    - ${{ pin_subpackage(name, upper_bound='x.x') }}
+  run_constraints:
+    - python >=3.6
+    - fast-rtps ==99999999 fast_rtps_collides_with_fast_dds
+
+tests:
+  - package_contents:
+      lib:
+        - if: win
+          then: fastrtps-${{ major_minor_version }}
+          else: fastrtps
+      include:
+        - fastdds/dds/domain/DomainParticipantFactory.hpp
+        - fastdds/rtps/Endpoint.h
+        - fastrtps/transport/UDPTransportDescriptor.h
+
+  - script:
+      - fast-discovery-server --help
+      - if: win
+        then:
+          - call fastdds --help
+          - call ros-discovery --help
+        else:
+          - fastdds --help
+          - ros-discovery --help
+
+  - requirements:
+      run:
+        - ${{ compiler('cxx') }}
+        - cmake <4
+        - ninja
+    files:
+      recipe:
+        - cmake_test/
+    script:
+      - if: unix
+        then: cmake -S cmake_test -B consumer -G Ninja $CMAKE_ARGS
+        else: cmake -S cmake_test -B consumer -G Ninja %CMAKE_ARGS%
+      - cmake --build consumer
+      - ctest --test-dir consumer --output-on-failure
+
+about:
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: |
+    eProsima Fast DDS (formerly Fast-RTPS)
+
+
+  homepage: https://github.com/eProsima/Fast-RTPS
+
+extra:
+  recipe-maintainers:
+    - wolfv
+    - MiguelCompany
+    - rsanchez15
