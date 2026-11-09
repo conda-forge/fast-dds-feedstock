@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: fast-dds
-  version: "2.6.12"
+  version: "3.6.2.0"
   major_minor_version: ${{ (version | split('.'))[:2] | join('.') }}
 
 package:
@@ -11,9 +11,9 @@ package:
 
 source:
   - url: https://github.com/eProsima/Fast-DDS/archive/v${{ version }}.tar.gz
-    sha256: 53476bcee331f28fe83e8387122fb7f84ab39209c459bd2cc227c71e4bd21c9b
+    sha256: 6d2c3687f3d5897974027cf264deac251eefc48fbfd7f9344f4d8d9660bb68e7
     patches:
-      - 0001-include-cstdint.patch
+      - patches/0001-support-macos-11.patch
 
 build:
   number: 0
@@ -27,18 +27,19 @@ requirements:
     - ninja
     - pkg-config
   host:
-    - fast-cdr >=1.0.24,<2
-    # The 2.6 branch still uses Asio's deprecated io_service API.
-    - asio >=1.10.8,<1.31
+    - fast-cdr >=2.3.6,<3
+    - asio >=1.34.2
     - tinyxml2
     - openssl
     - foonathan-memory
   run:
     - python
+    - psutil
+    - xmlschema
     - if: win
       then: pywin32
-    - fast-cdr >=1.0.24,<2
-    - asio >=1.10.8,<1.31
+    - fast-cdr >=2.3.6,<3
+    - asio >=1.34.2
     - tinyxml2
     - openssl
     - foonathan-memory
@@ -50,23 +51,28 @@ requirements:
 
 tests:
   - package_contents:
+      bin:
+        - fast-discovery-server
       lib:
         - if: win
-          then: fastrtps-${{ major_minor_version }}
-          else: fastrtps
+          then: fastdds-${{ major_minor_version }}
+          else: fastdds
       include:
         - fastdds/dds/domain/DomainParticipantFactory.hpp
-        - fastdds/rtps/Endpoint.h
-        - fastrtps/transport/UDPTransportDescriptor.h
+        - fastdds/rtps/Endpoint.hpp
+        - fastdds/rtps/transport/UDPTransportDescriptor.hpp
 
   - script:
-      - fast-discovery-server --help
       - if: win
         then:
           - call fastdds --help
+          - call fastdds discovery --help
+          - call fastdds xml validate --help
           - call ros-discovery --help
         else:
           - fastdds --help
+          - fastdds discovery --help
+          - fastdds xml validate --help
           - ros-discovery --help
 
   - requirements:
