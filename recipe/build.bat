@@ -16,7 +16,7 @@ if errorlevel 1 exit 1
 :: A real executable works without Windows symlink privileges.
 if exist "%LIBRARY_BIN%\fast-discovery-server.exe" del "%LIBRARY_BIN%\fast-discovery-server.exe"
 if errorlevel 1 exit 1
-copy /Y "%LIBRARY_BIN%\fast-discovery-server-1.0.0.exe" "%LIBRARY_BIN%\fast-discovery-server.exe"
+copy /Y "%LIBRARY_BIN%\fast-discovery-server-1.0.1.exe" "%LIBRARY_BIN%\fast-discovery-server.exe"
 if errorlevel 1 exit 1
 
 :: Use the environment's Python, not the system-wide py launcher.

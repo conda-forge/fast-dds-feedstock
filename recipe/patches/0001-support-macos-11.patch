@@ -1,0 +1,26 @@
+From ce7b6c7eddbc440d9b52dd2d4ed7ab476f9d2604 Mon Sep 17 00:00:00 2001
+From: Wolf Vollprecht <wolfv@users.noreply.github.com>
+Date: Mon, 9 Nov 2026 08:32:30 +0100
+Subject: [PATCH] Keep host identification compatible with macOS 11
+
+kIOMainPortDefault is only available starting with macOS 12. Use its original equivalent name so the conda-forge macOS 11 deployment target remains supported.
+---
+ src/cpp/utils/Host.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cpp/utils/Host.cpp b/src/cpp/utils/Host.cpp
+index 4e7582b..f9121db 100644
+--- a/src/cpp/utils/Host.cpp
++++ b/src/cpp/utils/Host.cpp
+@@ -46,7 +46,7 @@ fastcdr::string_255 Host::compute_machine_id()
+     }
+     return "";
+     #elif defined(__APPLE__)
+-    io_registry_entry_t ioRegistryRoot = IORegistryEntryFromPath(kIOMainPortDefault, "IOService:/");
++    io_registry_entry_t ioRegistryRoot = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/");
+     if (!ioRegistryRoot)
+     {
+         return "";
+-- 
+2.56.0
+
